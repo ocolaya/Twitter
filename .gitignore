@@ -1,0 +1,21 @@
+use strict;
+use warnings;
+use 5.010;
+ 
+use Net::Twitter;
+use Config::Tiny;
+use Data::Dumper qw(Dumper);
+use File::HomeDir;
+ 
+my $config_file = File::HomeDir->my_home . "/.twitter";
+die "$config_file is missing\n" if not -e $config_file;
+my $config = Config::Tiny->read( $config_file, 'utf8' );
+ 
+my $nt = Net::Twitter->new(
+    ssl      => 1,
+    traits   => [qw/API::RESTv1_1/],
+    consumer_key        => $config->{perlmaven}{api_key},
+    consumer_secret     => $config->{perlmaven}{api_secret},
+    access_token        => $config->{perlmaven}{access_token},
+    access_token_secret => $config->{perlmaven}{access_token_secret},
+);
